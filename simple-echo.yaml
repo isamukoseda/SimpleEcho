@@ -1,7 +1,7 @@
 ---
 swagger: '2.0'
 info:
-  version: 1.0.0
+  version: 1.0.1
   title: Echo
   description: |
     #### A Simple Echo Back Service
@@ -68,37 +68,37 @@ paths:
                 type: string
                 format: string
 #
-# ネストされた場合の定義方法は調査中
-# 
-# Cisco的な、show interface etnernetコマンドの例をRESTfulな定義に置き換える例
-# 
-# /interface/Ethernet/{slot}/{port}/{sub_port}
-#   get:
-#     parameters:
-#       - name: slot
-#         in: path
-#         type: integer
-#         required: true
-#       - name: prot
-#         in: path
-#         tyoe: integer
-#         required: true
-#     responses:
-#       200:
-#         description: OK
-#         schema:
-#           title: Show Interface Status
-#           type: object
-#           properties:
-#             status:
-#               type: integer
-#               default: 200
-#             message:
-#               type: string
-# 
-# 以下、省略
+# 以下は、Echoサービスではないですが、勉強会で説明する為のサンプル定義
 #
-#
-
-
-
+  /int/eth/{slot}/{port}:
+    get:
+      description: Ciscoのネットワークインタフェースの状態を確認するコマンド（show interface ethernet 0/0）をRESTで実装する例
+      parameters:
+        - name: slot
+          in: path
+          type: integer
+          required: true
+        - name: port
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            title: interface status
+            type: object
+            properties:
+              status:
+                description: interface status (up/down)
+                type: string
+                default: down
+              hardware:
+                description: hardware information
+                type: string
+                default: "1000/10000 Ethernet, address: 000d:ece7.df48 MTU 1500 byte"
+              portmode:
+                description: port mode (like flex-fabric)
+                type: string
+                default: "fex-fabrix"
+    

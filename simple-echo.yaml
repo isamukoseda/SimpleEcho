@@ -1,0 +1,104 @@
+---
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Echo
+  description: |
+    #### A Simple Echo Back Service
+    GETメッセージのQueryに指定したメッセージを、Replyの本文としてJSON形式で返す簡単なREST API
+    
+    メッセージの渡し方は、Query変数として渡す方法とパスに含める方法の2種類の実装方法が定義および実装可能
+    Query変数として渡す方法は、**/echo?msg=hello**となり、パスに含める方法は、**/echo/hello**となる。
+    
+    パスで実装する方法は、ネットワーク機器の特定のインターフェース情報を取得するような場合にマッチした記述方法なので、
+    
+    **/interface/Ethernet/2/0/0**
+    
+    というように記述し、サービスが保有している特定の要素に関する情報を**取得する**という意図を持ってAPIを定義することが一般的とされているので、RESTfulなサービスとしては、多少の違和感を持たれる可能性がありますが、このAPI定義では、あくまでGETでのREST APIの記述例としているので、細かな仕様や慣習は無視しています。
+    サービスとして公開するようなAPIを定義する際には、上記に順ずる慣習的や仕様については、しっかり考慮してデザインをする必要があります。apigee社等からRESTful APIの簡単なデザイン指標（考え方）について公開していて、多くのRESTサービスを設計する方が参照している資料がありますので、そのような資料や書籍を参照することを**強く**お勧めします。
+schemes:
+  - http
+basePath: /v1
+paths:
+  /echo:
+    get:
+      parameters:
+        - name: msg
+          in: query
+          description: Queryで送る文字（文）
+          type: string
+          format: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            title: Echo Reply
+            type: object
+            properties:
+              status:
+                description: stataus code (fixed 200)
+                type: integer
+                default: 200
+              message:
+                description: echo message
+                type: string
+                format: string
+  /echo/{msg}:
+    get:
+      parameters:
+        - name: msg
+          in: path
+          type: string
+          format: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            title: Echo Reply2
+            type: object
+            properties:
+              status:
+                description: status code (200)
+                type: integer
+                default: 200
+              message:
+                description: echo message
+                type: string
+                format: string
+#
+# ネストされた場合の定義方法は調査中
+# 
+# Cisco的な、show interface etnernetコマンドの例をRESTfulな定義に置き換える例
+# 
+# /interface/Ethernet/{slot}/{port}/{sub_port}
+#   get:
+#     parameters:
+#       - name: slot
+#         in: path
+#         type: integer
+#         required: true
+#       - name: prot
+#         in: path
+#         tyoe: integer
+#         required: true
+#     responses:
+#       200:
+#         description: OK
+#         schema:
+#           title: Show Interface Status
+#           type: object
+#           properties:
+#             status:
+#               type: integer
+#               default: 200
+#             message:
+#               type: string
+# 
+# 以下、省略
+#
+#
+
+
+
